@@ -1,0 +1,7 @@
+перевірити код на помилки можна використавши в cmd команду flake8 --select F401 перебуваючи у директорії коду
+
+якщо треба превірити використання озу то використовувати данну бібліотеку: https://docs.python.org/3/library/tracemalloc.html#module-tracemalloc
+
+
+
+токен бота: MTA3MzIxMjc3MjU3MTE3Mjk5NQ.GAF2Ba.F3gNySPfxLacgt2tQFKjIiI3C8ElBsgoRrp30s
