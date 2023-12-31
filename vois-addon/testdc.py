@@ -1,21 +1,10 @@
-from file_os import*
+import keyboard
 
-clas=["lock_s", "ent", "error", "music", "music_work",
-      "bot_screan"]
-for i in clas:
-    globals()[i.lower()] = globals()[i]()
-    
-text=""
-for i in clas:
-    try:
-        text+=eval(f"{i}.write(False)")
-    except TypeError:
-        eval(f"{i}.write(False)")
-    
-print(text)
+def on_key_event(e):
+    print(f"Key {e.name} with code {e.scan_code} {'pressed' if e.event_type == keyboard.KEY_DOWN else 'released'}")
 
-
-
+keyboard.hook(on_key_event)
+keyboard.wait("esc")
 
 
 

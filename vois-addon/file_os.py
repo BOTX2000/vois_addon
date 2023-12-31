@@ -13,9 +13,6 @@ class my_opinon_Exemplar:
         f.write(str(text))
         f.close()
         
-
-
-
 class my_opinon_Exemplar2:
     def __init__(self, bit, silence):
         self.bit = bit
@@ -25,13 +22,13 @@ class my_opinon_Exemplar2:
         with open("data/cache/cache.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
             if len(lines) > self.bit:
-                value_str = lines[self.bit].strip().lower()  # Отримуємо рядок і перетворюємо його до нижнього регістру
-                return value_str == 'true'  # Перевіряємо, чи рядок містить 'true' і повертаємо відповідне булеве значення
+                value_str = lines[self.bit].strip().lower()
+                return value_str == 'true'
             return False
 
     def write(self, value=None):
         value = value if value is not None else self.silence
-        value_str = 'True' if value else 'False'  # Перетворюємо True на 'True', False на 'False'
+        value_str = 'True' if value else 'False'
 
         with open("data/cache/cache.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
@@ -41,8 +38,6 @@ class my_opinon_Exemplar2:
 
         with open("data/cache/cache.txt", "w", encoding="utf-8") as f:
             f.writelines(lines)
-
-#ТЕРМІНОВО ПЕРЕРОБИТИ КОД ДЛЯ НОВИХ ЗНАЧЕНЬ!!!!!!!!!!!
 
 class s(my_opinon_Exemplar):#------------------------------------------
     def __init__(self):
@@ -79,11 +74,15 @@ class command (my_opinon_Exemplar):#------------------------------------------
 class bot_screan (my_opinon_Exemplar2):#5
     def __init__(self):
         super().__init__(5, True)
-"""
-class  (my_opinon_Exemplar):
+        
+class timer(my_opinon_Exemplar2):#6
     def __init__(self):
-        super().__init__("
-"""
+        super().__init__(6, False)
+        
+class timer_data(my_opinon_Exemplar):#------------------------------------------
+    def __init__(self):
+        super().__init__("data/cache/timer.txt", "")
+        
 
 
 

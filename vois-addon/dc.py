@@ -235,7 +235,7 @@ def test():
 
 
 def start_bot(bot):
-    bot.run("MTA3MzIxMjc3MjU3MTE3Mjk5NQ.GAF2Ba.F3gNySPfxLacgt2tQFKjIiI3C8ElBsgoRrp30s")
+    bot.run("MTA3MzIxMjc3MjU3MTE3Mjk5NQ.GqQnak.TjMdUjGbUg-PhHXOgBa2dV3djRUw-ydVDRdUxE")
     
 #test()
 start_bot(bot)

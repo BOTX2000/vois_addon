@@ -2,6 +2,7 @@ import datetime
 from tkinter import messagebox
 from tkinter import*
 from os import system
+import keyboard
 from pyautogui import*
 import pyautogui
 from keyboard import*
@@ -27,7 +28,8 @@ from PIL import Image
 ###########
 
 from file_os import*
-clas=["s", "lock_s", "ent", "error", "music", "music_work", "setting", "command",
+from online import*
+clas=["s", "lock_s", "ent", "error", "music", "music_work", "setting", "command", "my_music", "command_i", "timer", "timer_data"
       ]
 for i in clas:
     globals()[i.lower()] = globals()[i]()
@@ -35,51 +37,33 @@ for i in clas:
 pyautogui.FAILSAFE=False
 
 ############
-"""
-def errors(m):
-    mode=["r", "w", "w"]
-    er=1
-    f=open("data/cache/error.txt", mode[m])
-    if m==0:
-        er=f.read()
-    elif m==1:
-        f.write("0")
-    else:
-        f.write("1")
-    f.close()
-    return(er)
-"""
 
 def bind():
     add_hotkey("decimal+enter", lambda: click())
     wait()
 
 def check_cache():
-    er=0
-    if not os.path.exists("data/cache/s.txt"):
-        s.write()
-    if not os.path.exists("data/cache/ent.txt"):
+    print("start")
+    error.write(True)
+    if not os.path.exists("data/cache/cache.txt"):
+        lock_s.write()
         ent.write()
-    if not os.path.exists("data/cache/error.txt"):
-        error.write()
-    if not os.path.exists("data/cache/music.txt"):
         music.write()
-    if not os.path.exists("data/cache/music_work.txt"):
-        music_worc.write()
+        music_work.write()
+        bot_screan.write()
     if not os.path.exists("data/setting.txt"):
         save("", 1, 10, 0.1, 1, 100, 0)
+    if not os.path.exists("data/cache/timer.txt"):
+        timer_data.write()
     if not os.path.exists("data/data/command.txt"):
         messagebox.showerror("error", message="the command file is lost")
-        er+=1
         error.write(True)
         try:
-            online(a=3, p="command")
+            command_i.install()
             error.write()
-            er-=1
         except: pass
-        #online(a=3, p="command")
-    if er==0:
-        error.write()
+    error.write() 
+    if not error.read():
         print("good")
 
 def pre(a):
@@ -95,23 +79,13 @@ def fr(a):
         settin=settin.split("\n")
         return(settin[a])
     else:
-        return(ent.read())
+        return(ent.read())    
     
-"""
-def ent_save(a, s):
-    dia=["r", "w"]
-    f=open("data/cache/ent.txt", dia[s])
-    if s==1:
-        f.write(str(a))
-        f.close()
-    else:
-        return(f.read())
-"""        
-    
-def save(win, a, b, c, d, e, f:str):
+def save(win, a, b, c, d, e, f:str, g:str):
     setting.write(f"{a}\n{b}\n{c}\n{d}\n{e}")
     if f=="1": ent.write(False)
     if f=="0": ent.write()
+    timer_data.write(g)
     if d=="1" and win!="":
         win.destroy()
 
@@ -130,26 +104,6 @@ def settin():
     win=Tk()
     win.geometry("500x400+420+150")
     win.title("settnig")
-
-    
-    
-    """
-    x_l=50
-    y_l=20
-    text_l=["random: with                    to",
-            "volume change to:",
-            "automatic closing of the settings window after saving:",
-            "move the mouse to:", "pause mode:"]
-    x_e=["130", "199", "160", "354", "170", "125"]
-    y_e=20
-    for i in range(5):
-        globals()[f"l{i}"]=eval(f"label({x_l}, {y_l}, {win}, {text_l[i-1]})")
-        y_l+=20
-    for i in range(6):
-        globals()[f"l{i}"]=eval(f"entry({x_e[i-1]}, {y_e}, {win}, {i})")
-        if i!=1:
-            y_e+=20
-    """
     l=Label(win, text=f"random: with                    to")
     l.place(x=50, y=20)
     l1=Label(win, text="volume change to:")
@@ -160,6 +114,7 @@ def settin():
     l3.place(x=50, y=80)
     l4=Label(win, text="pause mode:")
     l4.place(x=50, y=100)
+    l5=label(50, 120, win, "timer:")
     
     i1=Entry(win, width=7)
     i1.place(x=130, y=20)# to l
@@ -179,13 +134,14 @@ def settin():
     i6=Entry(win, width=7)
     i6.place(x=125, y=100)# to l4
     i6.insert(1, fr(5))
+    i7=entry(100, 120, win, timer_data.read())
     
     b=Button(win, text="save", command=lambda: save(win, i1.get(), i2.get(),
                                                     i3.get(), i4.get(), i5.get(),
-                                                    i6.get()))
+                                                    i6.get(), i7.get()))
     b.place(x=240, y=365)
     win.bind("<F5>", lambda a: save(win, i1.get(), i2.get(), i3.get(), i4.get(),
-                                    i5.get(), i6.get()))
+                                    i5.get(), i6.get(), i7.get()))
     win.grab_set()
     win.mainloop()
 
@@ -201,21 +157,6 @@ def text(a):
     keyUp(dia[a])
     keyUp("ctrl")
     return
-
-"""
-def data_music(a):
-    m=0
-    mode=["r", "w", "w"]
-    f=open("data/cache/music.txt", mode[a])
-    if a==0:
-        m=f.read()
-    elif a==2:
-        f.write("1")
-    else:
-        f.write("0")
-    f.close()
-    return(m)
-"""
 
 def song(s):
     volume = cast(AudioUtilities.GetSpeakers().Activate(
@@ -308,7 +249,6 @@ def move(a, b=int(fr(4))):
     if b==0:
         b=int(fr(4))
     x, y=position()
-    #j(b)
     xy=["x, y-b", "x, y+b", "x-b, y",
         "x+b, y"]
     moveTo(eval(xy[a]))
@@ -365,26 +305,8 @@ def kurulusa():
     inpu.grid(column=0, row=1)
     inpu.bind("<Return>", lambda a: pere(text1, inpu, text))
     window.mainloop()
-
+    
 """
-def st(a):
-    di=["r", "w", "w"]
-    ret=164
-    f=open("data/cache/music_work.txt", di[a])
-    if a==0:
-        ret=f.read()
-    elif a==1:
-        f.write("0")
-    elif a==2:
-        f.write("1")
-    f.close()
-    return(ret)
-"""
-
-def install_all_music():
-    for i in range(online(d=1)):
-        online(a=i, p=i)
-
 def online(d=0, a=0, p=0):
     file_url=["https://drive.google.com/uc?id=1eQUC02pbqubt30ftSd0-f1iGLoZdsQxZ&export=download", #music0
               "https://drive.google.com/uc?id=15tU7UKczHjMZP0ge6Plr12y6nOF79liL&export=download", #music1
@@ -418,11 +340,11 @@ def online(d=0, a=0, p=0):
         messagebox.showerror("error", message=f"An error occurred while downlo"+
                              f"ading the file: {str(e)}")
     file.close()
-
+"""
 def plays(n=0):
     player = pyglet.media.Player()
     if not os.path.exists(f"data/cache/my_music{n}.mp3"):
-        online(a=n, p=n)
+        my_music.install(n)
     source = pyglet.media.load(f'data/cache/my_music{n}.mp3')
     music.write(True)
     music_work.write(True)
@@ -439,41 +361,66 @@ def plays(n=0):
                 music.write(True)
                 quit()
         player.play()
-        
-"""
-def file_s(a):
-    mode=["r", "w", "w"]
-    rez=""
-    f=open("data/cache/lock-s.txt", mode[a])
-    if a==0:
-        rez=int(f.read())
-    elif a==1:
-        f.write("0")
-    elif a==2:
-        f.write("1")
-    else:
-        messagebox.showerror("error", message="wrong argument when reading lock-s file")
-    f.close()
-    return(rez)
-"""
 
-def lock_screan(mode=all):
+def lock_screan(mode="all"):
     
     lock_s.write(True)
-    if mode==all:
-        while True:
+    if mode=="all":
+        while lock_s.read():
             x, y=size()
             x, y=int(x/2), int(y/2)
-            c, f=position()
             if not position() == x and y:
                 moveTo(x, y)
             if not lock_s.read:
                 break
-     
-
-
-
-
-
-
+            
+def game_def(dia, a=1):
+    data=["w", "a", "s", "d", "e", "t"]
+    keyboard.press(data[dia])
+    sleep(0.05)
+    if a==1: keyboard.release(data[dia])
+    print("break")
+    
+def timer_def():
+    while timer.read():
+        h=str(datetime.datetime.now().hour)
+        m=str(datetime.datetime.now().minute)
+        c=h+":"+m
+        if timer_data.read()==c:
+            timer_data.write()
+            messagebox.showerror("timer:", message=c)
+        sleep(10)
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
